@@ -20,7 +20,7 @@ class Proxy(object):
         return self.resp_time < other.resp_time
 
     def __repr__(self):
-        return f'[{self.type}, {self.address}:{self.port}] - {self.anonymity} {self.region}'
+        return f'<{self.resp_time:.2f}s [{self.type}, {self.address}:{self.port}] - {self.anonymity} {self.region}'
 
     def ping(self):
         self.region, self.resp_time = resolve(self.address, self.port, self.type)
@@ -47,6 +47,7 @@ class ProxyPlugin(object):
     def fetches(self):
         self.fetch_proxies()
         self.ping_proxies()
+        sorted(self.proxies)
 
     def fetch_proxies(self):
         # Fetch proxy list from address
