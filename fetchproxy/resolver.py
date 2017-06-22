@@ -15,7 +15,7 @@ def resolve(addr, port, typ):
     try:
         info = _mmdb_reader.get(addr)
     except (maxminddb.errors.InvalidDatabaseError, ValueError):
-        return '', TIMEOUT
+        return ('', TIMEOUT)
 
     st = time.time()
     try:
@@ -23,6 +23,6 @@ def resolve(addr, port, typ):
                       proxies={typ: f'{typ}://{addr}:{port}'},
                       timeout=TIMEOUT)
     except Exception as e:
-        return '', TIMEOUT
+        return ('', TIMEOUT)
 
     return info['country']['names']['en'], time.time() - st

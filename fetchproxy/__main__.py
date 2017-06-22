@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from .plugins import usproxy
+import concurrent.futures
+from .plugins import plugins
 
 
 if __name__ == '__main__':
-    p = usproxy.USProxy()
-    p.fetch_proxies()
-    p.ping_proxies()
+    proxies = [p() for p in plugins]
+    with concurrent.futures.ThreadPoolExecutor(10) as executor:
+        for proxy in proxies:
+            executor.submit(proxy.fetches)
 
-    for proxy in p.proxies:
-        print(proxy.json())
+    import pdb
+    pdb.set_trace()

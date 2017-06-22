@@ -14,6 +14,11 @@ class Proxy(object):
         self.type = typ
         self.resp_time = 0.0
 
+    def __lt__(self, other):
+        if not isinstance(other, Proxy):
+            raise NotImplementedError
+        return self.resp_time < other.resp_time
+
     def __repr__(self):
         return f'[{self.type}, {self.address}:{self.port}] - {self.anonymity} {self.region}'
 
@@ -38,6 +43,10 @@ class ProxyPlugin(object):
         for proxy in self.proxies[:]:
             if proxy.resp_time == TIMEOUT:
                 self.proxies.remove(proxy)
+
+    def fetches(self):
+        self.fetch_proxies()
+        self.ping_proxies()
 
     def fetch_proxies(self):
         # Fetch proxy list from address
